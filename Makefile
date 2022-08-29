@@ -6,7 +6,7 @@
 #    By: mabimich <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/27 17:57:39 by mabimich          #+#    #+#              #
-#    Updated: 2022/08/27 18:12:38 by mabimich         ###   ########.fr        #
+#    Updated: 2022/08/29 15:14:55 by mabimich         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ RM		= rm -f
 
 CC		= cc
 
-FLAGS		= -Wall -Wextra -Werror
+FLAGS		= -Wall -Wextra -Werror -pthread
 
 all		: ${NAME}
 bonus	: ${NAME_BONUS}
