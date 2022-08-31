@@ -6,7 +6,7 @@
 /*   By: mabimich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 18:25:49 by mabimich          #+#    #+#             */
-/*   Updated: 2022/08/30 17:31:43 by mabimich         ###   ########.fr       */
+/*   Updated: 2022/08/31 22:26:17 by mabimich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@
 # include <stdio.h>
 # include <pthread.h>
 
+# define STR_USAGE "Usage: 'number_of_philosophers time_to_die time_to_eat \
+time_to_sleep [number_of_times_each_philosopher_must_eat]"
+
 typedef	struct s_fork
 {
 	pthread_mutex_t	fork_mtx;
@@ -29,7 +32,7 @@ typedef struct s_philo
 {
 	int			id;
 	int			n[5];
-	pthread_t	*thd;
+	pthread_t	thd;
 	t_fork		*fork;
 	time_t		start_t;
 	int			finish;
@@ -44,7 +47,7 @@ typedef struct s_data
 {
 	int			n[5];
 	t_fork		*fork;
-	t_philo		*philo;
+	t_philo		**philo;
 	time_t		start_t;
 	int			finish;
 	int			n_of_philo;
