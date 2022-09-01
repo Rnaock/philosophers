@@ -6,7 +6,7 @@
 /*   By: mabimich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 18:25:49 by mabimich          #+#    #+#             */
-/*   Updated: 2022/08/31 22:26:17 by mabimich         ###   ########.fr       */
+/*   Updated: 2022/09/01 19:45:21 by mabimich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,22 @@ typedef	struct s_fork
 	size_t			in_use;
 }	t_fork;
 
+typedef struct s_data
+{
+	int			n[5];
+	t_fork		*fork;
+	time_t		start_t;
+	int			finish;
+	int			n_of_philo;
+	int			t_2_die;
+	int			t_2_eat;
+	int			t_2_sleep;
+	int			n_of_t_philo_eat;
+}				t_data;
+
 typedef struct s_philo
 {
+	t_data		*data;
 	int			id;
 	int			n[5];
 	pthread_t	thd;
@@ -42,19 +56,5 @@ typedef struct s_philo
 	int			t_2_sleep;
 	int			n_of_t_philo_eat;
 }				t_philo;
-
-typedef struct s_data
-{
-	int			n[5];
-	t_fork		*fork;
-	t_philo		**philo;
-	time_t		start_t;
-	int			finish;
-	int			n_of_philo;
-	int			t_2_die;
-	int			t_2_eat;
-	int			t_2_sleep;
-	int			n_of_t_philo_eat;
-}				t_data;
 
 #endif
