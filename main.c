@@ -6,7 +6,7 @@
 /*   By: mabimich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 18:16:08 by mabimich          #+#    #+#             */
-/*   Updated: 2022/09/01 21:02:09 by mabimich         ###   ########.fr       */
+/*   Updated: 2022/09/02 17:50:59 by mabimich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,16 @@
 
 # define NC	"\e[0m"
 # define YELLOW	"\e[1;33m"
+
+void	ft_print(int dead, t_philo *philo, time_t t, char *str)
+{
+	pthread_mutex_lock(&philo->data->msg);
+	if (!philo->data->finish)
+		printf("%ld\t%d\t%s\n", t, philo->id, str);
+	if (dead)
+		philo->data->finish = 1;
+	pthread_mutex_unlock(&philo->data->msg);
+}
 
 time_t	get_time_in_ms(void)
 {
@@ -23,14 +33,6 @@ time_t	get_time_in_ms(void)
 		return (0);
 	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
-
-void	*philo_routine(void *philo)
-{
-	t_philo *p = philo;
-	printf("%sThread [%ld]: Le plus grand ennui c'est d'exister sans vivre.%d\t%s\n", YELLOW, p->thd, p->n[0], NC);
-	return (NULL);
-}
-
 
 t_philo	**init_philos(t_data *data)
 {
@@ -52,8 +54,12 @@ t_philo	**init_philos(t_data *data)
 			free(philos);
 			return (NULL);
 		}
-		philos[i]->id = i;
+		philos[i]->id = i + 1;
 		philos[i]->n[0] = data->n[0];
+		philos[i]->n[1] = data->n[1];
+		philos[i]->n[2] = data->n[2];
+		philos[i]->n[3] = data->n[3];
+		philos[i]->n[4] = data->n[4];
 		philos[i]->data = data;
 	}
 	return (philos);
@@ -73,12 +79,12 @@ int create_philo(t_data *data)
 	while (++i < data->n[0] && !out)
 	{
 		out = pthread_create(&philos[i]->thd, NULL, philo_routine, philos[i]);
-		printf("%d) Thread [%ld]: %d\n", i, philos[i]->thd, out);
+	//	printf("%d) Thread [%ld]: %d\n", i + 1, philos[i]->thd, out);
 	}
 	i = -1;
 	while (++i < data->n[0] && !out)
 	{
-		printf("%d) join [%ld]\n", i, philos[i]->thd);
+//		printf("%d) join [%ld]\n", i + 1, philos[i]->thd);
 		out = pthread_join(philos[i]->thd, NULL);
 	}
 	return (0);
@@ -95,6 +101,10 @@ t_data	*init(int ac, char **av)
 		return (NULL);
 	while (++i < ac - 1)
 		data->n[i] = ft_atoi(av[i + 1]);
+	if (ac == 5)
+		data->n[4] = 10;
+	data->finish = 0;//  n et n+1 (au moins a descendre plus tard)
+	data->start_t = get_time_in_ms() + 300;// (il faudra attendre que tout les philo soit ok puis avant de lancer la simu on met ces info? a reflchir?
 	if (!data || create_philo(data))
 		return (NULL);
 /*	if (!philos)
@@ -110,7 +120,6 @@ t_data	*init(int ac, char **av)
 		ft_putendl_fd("Erreur 2malloc", 2);
 		return (NULL);
 	}
-	data->start_t = get_time_in_ms();
 	return (data);
 }
 

@@ -6,7 +6,7 @@
 /*   By: mabimich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 18:25:49 by mabimich          #+#    #+#             */
-/*   Updated: 2022/09/01 19:45:21 by mabimich         ###   ########.fr       */
+/*   Updated: 2022/09/02 18:18:37 by mabimich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,17 @@ typedef	struct s_fork
 
 typedef struct s_data
 {
-	int			n[5];
-	t_fork		*fork;
-	time_t		start_t;
-	int			finish;
-	int			n_of_philo;
-	int			t_2_die;
-	int			t_2_eat;
-	int			t_2_sleep;
-	int			n_of_t_philo_eat;
-}				t_data;
+	int				n[5];
+	t_fork			*fork;
+	time_t			start_s;
+	int				finish;
+	pthread_mutex_t	msg;
+	int				n_of_philo;
+	int				t_2_die;
+	int				t_2_eat;
+	int				t_2_sleep;
+	int				n_of_t_philo_eat;
+}					t_data;
 
 typedef struct s_philo
 {
@@ -49,12 +50,16 @@ typedef struct s_philo
 	pthread_t	thd;
 	t_fork		*fork;
 	time_t		start_t;
-	int			finish;
+	time_t		last_m;
 	int			n_of_philo;
 	int			t_2_die;
 	int			t_2_eat;
 	int			t_2_sleep;
 	int			n_of_t_philo_eat;
 }				t_philo;
+
+void	ft_print(int dead, t_philo *philo, time_t t, char *str);
+time_t	get_time_in_ms(void);
+void	*philo_routine(void *philo);//le retour (*void) est il necessaire?
 
 #endif

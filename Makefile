@@ -6,7 +6,7 @@
 #    By: mabimich <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/27 17:57:39 by mabimich          #+#    #+#              #
-#    Updated: 2022/08/29 15:14:55 by mabimich         ###   ########.fr        #
+#    Updated: 2022/09/02 17:39:11 by mabimich         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ LIB_DIR		= ./libft
 
 LIBFT		= ./libft/libft.a
 
-SRCS		= main.c
+SRCS		= main.c philo.c
 SRCS_BONUS	= main_bonus.c
 
 OBJS		= ${SRCS:.c=.o}
