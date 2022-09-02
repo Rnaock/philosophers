@@ -6,7 +6,7 @@
 /*   By: mabimich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 18:16:08 by mabimich          #+#    #+#             */
-/*   Updated: 2022/09/02 17:50:59 by mabimich         ###   ########.fr       */
+/*   Updated: 2022/09/02 20:31:16 by mabimich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,15 @@ t_philo	**init_philos(t_data *data)
 		philos[i]->n[3] = data->n[3];
 		philos[i]->n[4] = data->n[4];
 		philos[i]->data = data;
+		if (philos[i]->id == 1)
+			philos[i]->fork_l = &data->fork[data->n[0]];
+		else
+			philos[i]->fork_l = &data->fork[philos[i]->id - 1];
+	//	if (philos[i]->id == data->n[0])
+	//		philos[i]->fork[1] = data->fork[data->n[0]];
+	//	else
+		philos[i]->fork_r = &data->fork[philos[i]->id];
+
 	}
 	return (philos);
 }
@@ -104,9 +113,7 @@ t_data	*init(int ac, char **av)
 	if (ac == 5)
 		data->n[4] = 10;
 	data->finish = 0;//  n et n+1 (au moins a descendre plus tard)
-	data->start_t = get_time_in_ms() + 300;// (il faudra attendre que tout les philo soit ok puis avant de lancer la simu on met ces info? a reflchir?
-	if (!data || create_philo(data))
-		return (NULL);
+	data->start_s = get_time_in_ms() + 300;// (il faudra attendre que tout les philo soit ok puis avant de lancer la simu on met ces info? a reflchir?
 /*	if (!philos)
 	{
 		free(data);
@@ -117,9 +124,11 @@ t_data	*init(int ac, char **av)
 	if (!data->fork)
 	{
 		free(data);
-		ft_putendl_fd("Erreur 2malloc", 2);
+		ft_putendl_fd("Erreur malloc", 2);
 		return (NULL);
 	}
+	if (!data || create_philo(data))
+		return (NULL);
 	return (data);
 }
 
@@ -146,7 +155,7 @@ int	main(int ac, char **av)
 	if (is_bad_input(ac, av))
 		return (ft_putendl_fd(STR_USAGE, 2), 1);
 	data = init(ac, av);
-	if (!data || !data->start_t)
+	if (!data || !data->start_s)
 		return (1);
 	free(data);
 	return (0);
