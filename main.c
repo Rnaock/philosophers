@@ -6,7 +6,7 @@
 /*   By: mabimich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 18:16:08 by mabimich          #+#    #+#             */
-/*   Updated: 2022/09/05 04:13:19 by manuel           ###   ########.fr       */
+/*   Updated: 2022/09/05 14:40:30 by mabimich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,12 @@
 
 void	ft_print(int dead, time_t t, t_philo *philo, char *str)
 {
-	pthread_mutex_lock(&philo->data->msg);
+//	pthread_mutex_lock(&philo->data->msg);
 	if (!philo->data->finish)
 		printf("%ld\t%d\t%s\n", t, philo->id, str);
 	if (dead)
 		philo->data->finish = 1;
-	pthread_mutex_unlock(&philo->data->msg);
+//	pthread_mutex_unlock(&philo->data->msg);
 }
 
 time_t	get_time_in_ms(void)
