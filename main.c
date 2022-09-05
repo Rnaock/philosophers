@@ -6,7 +6,7 @@
 /*   By: mabimich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 18:16:08 by mabimich          #+#    #+#             */
-/*   Updated: 2022/09/02 20:31:16 by mabimich         ###   ########.fr       */
+/*   Updated: 2022/09/05 04:13:19 by manuel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 # define NC	"\e[0m"
 # define YELLOW	"\e[1;33m"
 
-void	ft_print(int dead, t_philo *philo, time_t t, char *str)
+void	ft_print(int dead, time_t t, t_philo *philo, char *str)
 {
 	pthread_mutex_lock(&philo->data->msg);
 	if (!philo->data->finish)
@@ -62,14 +62,15 @@ t_philo	**init_philos(t_data *data)
 		philos[i]->n[4] = data->n[4];
 		philos[i]->data = data;
 		if (philos[i]->id == 1)
-			philos[i]->fork_l = &data->fork[data->n[0]];
+			philos[i]->fork_l = &data->fork[data->n[0] - 1];
 		else
-			philos[i]->fork_l = &data->fork[philos[i]->id - 1];
-	//	if (philos[i]->id == data->n[0])
-	//		philos[i]->fork[1] = data->fork[data->n[0]];
-	//	else
-		philos[i]->fork_r = &data->fork[philos[i]->id];
-
+			philos[i]->fork_l = &data->fork[i - 1];
+		if (philos[i]->id == data->n[0])
+			philos[i]->fork_r = &data->fork[data->n[0] - 1];
+		else
+			philos[i]->fork_r = &data->fork[i];
+		philos[i]->fork_r->in_use = 0;
+		philos[i]->start_s = data->start_s;
 	}
 	return (philos);
 }
@@ -111,7 +112,8 @@ t_data	*init(int ac, char **av)
 	while (++i < ac - 1)
 		data->n[i] = ft_atoi(av[i + 1]);
 	if (ac == 5)
-		data->n[4] = 10;
+	    data->n[4] = 2147483647;
+
 	data->finish = 0;//  n et n+1 (au moins a descendre plus tard)
 	data->start_s = get_time_in_ms() + 300;// (il faudra attendre que tout les philo soit ok puis avant de lancer la simu on met ces info? a reflchir?
 /*	if (!philos)
@@ -127,8 +129,16 @@ t_data	*init(int ac, char **av)
 		ft_putendl_fd("Erreur malloc", 2);
 		return (NULL);
 	}
+	i = -1;
+	pthread_mutex_init(&data->msg, NULL);
+	while (++i < data->n[0])
+		pthread_mutex_init(&data->fork->mtx, NULL);
 	if (!data || create_philo(data))
 		return (NULL);
+	pthread_mutex_destroy(&data->msg);
+	i = -1;
+	while (++i < data->n[0])
+		pthread_mutex_destroy(&data->fork->mtx);
 	return (data);
 }
 
@@ -136,19 +146,19 @@ static int	is_bad_input(int ac, char **av)
 {
 	int	i;
 
-	i = 0;
+	if (ft_atoi(av[1]) < 1)
+		return (1);
+	i = 1;
 	while (++i < ac - 1)
-		if (ft_atoi(av[i + 1]) < 1)
+		if (ft_atoi(av[i + 1]) < 0)
 			return (1);
 	return (0);
 }
 
 int	main(int ac, char **av)
 {
-	int		i;
 	t_data	*data;
 
-	i = -1;
 	data = NULL;
 	if (ac != 5 && ac != 6)
 		return (ft_putendl_fd(STR_USAGE, 2), 1);

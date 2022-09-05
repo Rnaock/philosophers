@@ -6,22 +6,19 @@
 #    By: mabimich <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/27 17:57:39 by mabimich          #+#    #+#              #
-#    Updated: 2022/09/02 17:39:11 by mabimich         ###   ########.fr        #
+#    Updated: 2022/09/05 04:38:54 by manuel           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		= philo
-NAME_BONUS	= philo_bonus
 
 LIB_DIR		= ./libft
 
 LIBFT		= ./libft/libft.a
 
 SRCS		= main.c philo.c
-SRCS_BONUS	= main_bonus.c
 
 OBJS		= ${SRCS:.c=.o}
-OBJS_BONUS	= ${SRCS_BONUS:.c=.o}
 
 RM		= rm -f
 
@@ -30,7 +27,6 @@ CC		= cc
 FLAGS		= -Wall -Wextra -Werror -pthread
 
 all		: ${NAME}
-bonus	: ${NAME_BONUS}
 
 %.o: %.c
 	$(CC) -Wall -Wextra -Werror -o3 -g3 -c $< -o $@
@@ -44,11 +40,6 @@ ${NAME}			: ${OBJS} ${LIBFT}
 		  @echo "\033[34m----Compiling----"
 		  @${CC} ${FLAGS} ${OBJS} -o ${NAME} ${LIBFT} 
 		  @echo "OK\e[39m"
-
-#${NAME_BONUS}	: ${OBJS_BONUS} ${LIBFT}
-#		  @echo "\033[34m___--Compiling bonus--___"
-#		  @${CC} ${FLAGS} ${OBJS_BONUS} -o ${NAME_BONUS} ${LIBFT} 
-#		  @echo "OK\e[39m"
 
 clean		:
 		  @echo "\033[31m----Cleaning libft----"

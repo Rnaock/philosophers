@@ -6,7 +6,7 @@
 /*   By: mabimich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 18:25:49 by mabimich          #+#    #+#             */
-/*   Updated: 2022/09/02 20:31:23 by mabimich         ###   ########.fr       */
+/*   Updated: 2022/09/05 04:12:28 by manuel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ time_to_sleep [number_of_times_each_philosopher_must_eat]"
 
 typedef	struct s_fork
 {
-	pthread_mutex_t	fork_mtx;
-	size_t			in_use;
+	pthread_mutex_t	mtx;
+	int			in_use;
 }					t_fork;
 
 typedef struct s_data
@@ -47,6 +47,7 @@ typedef struct s_philo
 	t_data		*data;
 	int			id;
 	int			n[5];
+	time_t		start_s;
 	pthread_t	thd;
 	t_fork		*fork_l;
 	t_fork		*fork_r;
@@ -59,7 +60,7 @@ typedef struct s_philo
 	int			n_of_t_philo_eat;
 }				t_philo;
 
-void	ft_print(int dead, t_philo *philo, time_t t, char *str);
+void	ft_print(int dead, time_t t, t_philo *philo, char *str);
 time_t	get_time_in_ms(void);
 void	*philo_routine(void *philo);//le retour (*void) est il necessaire?
 
