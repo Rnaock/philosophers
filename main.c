@@ -6,7 +6,7 @@
 /*   By: mabimich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 18:16:08 by mabimich          #+#    #+#             */
-/*   Updated: 2022/09/05 14:40:30 by mabimich         ###   ########.fr       */
+/*   Updated: 2022/09/06 21:37:44 by mabimich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,12 @@
 
 void	ft_print(int dead, time_t t, t_philo *philo, char *str)
 {
-//	pthread_mutex_lock(&philo->data->msg);
+	pthread_mutex_lock(&philo->data->msg);
 	if (!philo->data->finish)
 		printf("%ld\t%d\t%s\n", t, philo->id, str);
 	if (dead)
 		philo->data->finish = 1;
-//	pthread_mutex_unlock(&philo->data->msg);
+	pthread_mutex_unlock(&philo->data->msg);
 }
 
 time_t	get_time_in_ms(void)
@@ -55,11 +55,7 @@ t_philo	**init_philos(t_data *data)
 			return (NULL);
 		}
 		philos[i]->id = i + 1;
-		philos[i]->n[0] = data->n[0];
-		philos[i]->n[1] = data->n[1];
-		philos[i]->n[2] = data->n[2];
-		philos[i]->n[3] = data->n[3];
-		philos[i]->n[4] = data->n[4];
+		philos[i]->n_of_t_philo_eat = data->n[4];
 		philos[i]->data = data;
 		if (philos[i]->id == 1)
 			philos[i]->fork_l = &data->fork[data->n[0] - 1];
@@ -87,16 +83,14 @@ int create_philo(t_data *data)
 	if (!philos)
 		return (free(data), 1);
 	while (++i < data->n[0] && !out)
-	{
 		out = pthread_create(&philos[i]->thd, NULL, philo_routine, philos[i]);
-	//	printf("%d) Thread [%ld]: %d\n", i + 1, philos[i]->thd, out);
-	}
 	i = -1;
 	while (++i < data->n[0] && !out)
 	{
-//		printf("%d) join [%ld]\n", i + 1, philos[i]->thd);
 		out = pthread_join(philos[i]->thd, NULL);
+		free(philos[i]);
 	}
+	free(philos);
 	return (0);
 }
 
@@ -167,6 +161,7 @@ int	main(int ac, char **av)
 	data = init(ac, av);
 	if (!data || !data->start_s)
 		return (1);
+	free(data->fork);
 	free(data);
 	return (0);
 }

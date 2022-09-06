@@ -6,7 +6,7 @@
 /*   By: mabimich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 18:25:49 by mabimich          #+#    #+#             */
-/*   Updated: 2022/09/05 04:12:28 by manuel           ###   ########.fr       */
+/*   Updated: 2022/09/06 20:50:06 by mabimich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ typedef struct s_philo
 {
 	t_data		*data;
 	int			id;
-	int			n[5];
 	time_t		start_s;
 	pthread_t	thd;
 	t_fork		*fork_l;
