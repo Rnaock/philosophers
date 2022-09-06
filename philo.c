@@ -6,13 +6,13 @@
 /*   By: mabimich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 18:16:08 by mabimich          #+#    #+#             */
-/*   Updated: 2022/09/06 21:27:26 by mabimich         ###   ########.fr       */
+/*   Updated: 2022/09/06 23:02:32 by mabimich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	my_usleep(t_philo *p, time_t t)
+static int	my_usleep(t_philo *p, time_t t)
 {
 	time_t	start;
 	int		i;
@@ -33,7 +33,7 @@ int	my_usleep(t_philo *p, time_t t)
 	return (0);
 }
 
-void	p_eat(t_philo *p)
+static void	p_eat(t_philo *p)
 {
 	while (1)
 	{
@@ -62,13 +62,13 @@ void	p_eat(t_philo *p)
 	}
 }
 
-void	p_sleep(t_philo *p)
+static void	p_sleep(t_philo *p)
 {
 	ft_print(0, get_time_in_ms() - p->data->start_s, p, "is sleeping");
 	my_usleep(p, p->data->n[3]);
 }
 
-void	p_think(t_philo *p)
+static void	p_think(t_philo *p)
 {
 	ft_print(0, get_time_in_ms() - p->data->start_s, p, "is thinking");
 	if (!p->data->n[2] || !p->data->n[3])
