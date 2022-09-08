@@ -6,7 +6,7 @@
 /*   By: mabimich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 18:16:08 by mabimich          #+#    #+#             */
-/*   Updated: 2022/09/08 18:54:38 by mabimich         ###   ########.fr       */
+/*   Updated: 2022/09/08 20:04:36 by mabimich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,13 @@ static int	my_usleep(t_philo *p, time_t t)
 			ft_print(1, get_t() - p->data->start_s, p, "is died");
 			return (1);
 		}
-		if (!(++i % 1000) && p->data->finish)
-			return (0);
+		if (!(++i % 1000))
+		{
+			pthread_mutex_lock(&p->data->msg);
+			if (p->data->finish)
+				return (pthread_mutex_unlock(&p->data->msg), 0);
+			pthread_mutex_unlock(&p->data->msg);
+		}
 	}
 	return (0);
 }
@@ -85,7 +90,7 @@ void	*philo_routine(void *philo)
 	p->last_m = get_t();
 	if (p->id % 2)
 		my_usleep(p, p->data->n[2] / 4);
-	while (p->n_of_t_philo_eat-- && !p->data->finish)
+	while (p->n_of_t_philo_eat--)
 	{
 		if (p->data->n[0] == 1)
 		{
