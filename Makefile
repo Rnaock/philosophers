@@ -6,7 +6,7 @@
 #    By: mabimich <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/27 17:57:39 by mabimich          #+#    #+#              #
-#    Updated: 2022/09/06 22:36:24 by mabimich         ###   ########.fr        #
+#    Updated: 2022/09/08 19:04:54 by mabimich         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,4 +46,4 @@ fclean		: clean
 
 re		: fclean all
 
-.PHONY	: all bonus clean fclean re
+.PHONY	: all clean fclean re

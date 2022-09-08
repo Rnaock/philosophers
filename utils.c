@@ -6,7 +6,7 @@
 /*   By: mabimich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/06 22:18:02 by mabimich          #+#    #+#             */
-/*   Updated: 2022/09/06 22:46:28 by mabimich         ###   ########.fr       */
+/*   Updated: 2022/09/08 18:35:32 by mabimich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,11 @@ int	ft_atoi(const char *str)
 	if (str[i] == '-' || str[i] == '+')
 		if (str[i++] == '-')
 			m = -1;
-	while (ft_isdigit((int)str[i]))
+	while (str[i])
 	{
-		if ((r * 10) + sizeof(char) > LONG_MAX)
+		if (!ft_isdigit(str[i]) || ((long)(r * 10 + str[i] - '0') > INT_MAX))
 		{
-			if (m > 0)
+			if (!ft_isdigit(str[i]) || m > 0)
 				return (-1);
 			else
 				return (0);
@@ -68,13 +68,22 @@ void	ft_print(int dead, time_t t, t_philo *philo, char *str)
 {
 	pthread_mutex_lock(&philo->data->msg);
 	if (!philo->data->finish)
-		printf("%ld\t%d\t%s\n", t, philo->id, str);
-	if (dead)
+	{
+		if (str)
+			printf("%ld\t%d\t%s\n", t, philo->id, str);
+		else
+		{
+			printf("%ld\t%d\thas taken a fork\n", t, philo->id);
+			printf("%ld\t%d\thas taken a fork\n", t, philo->id);
+			printf("%ld\t%d\tis eating\n", t, philo->id);
+		}
+	}
+	if (dead == 1)
 		philo->data->finish = 1;
 	pthread_mutex_unlock(&philo->data->msg);
 }
 
-time_t	get_time_in_ms(void)
+time_t	get_t(void)
 {
 	struct timeval	tv;
 

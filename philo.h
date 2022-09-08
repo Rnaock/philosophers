@@ -6,7 +6,7 @@
 /*   By: mabimich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 18:25:49 by mabimich          #+#    #+#             */
-/*   Updated: 2022/09/06 23:02:42 by mabimich         ###   ########.fr       */
+/*   Updated: 2022/09/08 17:12:41 by mabimich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ typedef struct s_philo
 }				t_philo;
 
 void	ft_print(int dead, time_t t, t_philo *philo, char *str);
-time_t	get_time_in_ms(void);
+time_t	get_t(void);
 void	*philo_routine(void *philo);
 int		ft_atoi(const char *str);
 void	*ft_calloc(size_t count, size_t size);

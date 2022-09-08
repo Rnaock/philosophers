@@ -6,7 +6,7 @@
 /*   By: mabimich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 18:16:08 by mabimich          #+#    #+#             */
-/*   Updated: 2022/09/06 23:07:44 by mabimich         ###   ########.fr       */
+/*   Updated: 2022/09/08 18:40:22 by mabimich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static int	create_philo(t_data *data)
 	out = 0;
 	philos = ft_calloc(sizeof(t_philo), data->n[0]);
 	if (!philos || init_philos(data, philos))
-		return (free(data), 1);
+		return (free(data->fork), 1);
 	while (++i < data->n[0] && !out)
 		out = pthread_create(&philos[i]->thd, NULL, philo_routine, philos[i]);
 	i = -1;
@@ -72,34 +72,31 @@ static t_data	*init(int ac, char **av)
 	i = -1;
 	data = ft_calloc(sizeof(t_data), 1);
 	if (!data)
-		return (NULL);
+		return (printf("Error: malloc data\n"), NULL);
 	while (++i < ac - 1)
 		data->n[i] = ft_atoi(av[i + 1]);
 	if (ac == 5)
 		data->n[4] = INT_MAX;
+	data->start_s = get_t() + 300;
+	if (data->start_s == 300)
+		return (printf("Error: gettimeofdat()\n"), data);
 	data->fork = ft_calloc(sizeof(t_fork), data->n[0]);
 	if (!data->fork)
-	{
-		free(data);
-		printf("Erreur malloc\n");
-		return (NULL);
-	}
-	data->start_s = get_time_in_ms() + 300;
-	i = -1;
+		return (printf("Error: malloc fork\n"), data);
 	pthread_mutex_init(&data->msg, NULL);
-	if (!data || create_philo(data))
-		return (NULL);
+	if (pthread_mutex_init(&data->msg, NULL) || create_philo(data))
+		return (free(data->fork), data);
 	pthread_mutex_destroy(&data->msg);
 	i = -1;
 	while (++i < data->n[0])
 		pthread_mutex_destroy(&data->fork->mtx);
-	return (data);
+	return (free(data->fork), data);
 }
 
 static int	is_bad_input(int ac, char **av)
 {
 	int	i;
-	
+
 	i = 1;
 	if (ac != 5 && ac != 6)
 		return (1);
@@ -119,9 +116,8 @@ int	main(int ac, char **av)
 	if (is_bad_input(ac, av))
 		return (printf("%s\n", STR_USAGE), 1);
 	data = init(ac, av);
-	if (!data || !data->start_s)
+	if (!data)
 		return (1);
-	free(data->fork);
 	free(data);
 	return (0);
 }
