@@ -6,7 +6,7 @@
 /*   By: mabimich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 18:16:08 by mabimich          #+#    #+#             */
-/*   Updated: 2022/09/08 18:40:22 by mabimich         ###   ########.fr       */
+/*   Updated: 2022/09/09 05:05:59 by manuel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,21 +91,6 @@ static t_data	*init(int ac, char **av)
 	while (++i < data->n[0])
 		pthread_mutex_destroy(&data->fork->mtx);
 	return (free(data->fork), data);
-}
-
-static int	is_bad_input(int ac, char **av)
-{
-	int	i;
-
-	i = 1;
-	if (ac != 5 && ac != 6)
-		return (1);
-	if (ft_atoi(av[i]) < 1)
-		return (1);
-	while (++i < ac)
-		if (ft_atoi(av[i]) < 0)
-			return (1);
-	return (0);
 }
 
 int	main(int ac, char **av)

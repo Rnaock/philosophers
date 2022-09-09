@@ -6,7 +6,7 @@
 /*   By: mabimich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 18:16:08 by mabimich          #+#    #+#             */
-/*   Updated: 2022/09/08 20:04:36 by mabimich         ###   ########.fr       */
+/*   Updated: 2022/09/09 05:07:23 by manuel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,8 @@ static int	my_usleep(t_philo *p, time_t t)
 			ft_print(1, get_t() - p->data->start_s, p, "is died");
 			return (1);
 		}
-		if (!(++i % 1000))
-		{
-			pthread_mutex_lock(&p->data->msg);
-			if (p->data->finish)
-				return (pthread_mutex_unlock(&p->data->msg), 0);
-			pthread_mutex_unlock(&p->data->msg);
-		}
+		if (!(++i % 1000) && !is_finish(p->data))
+			return (0);
 	}
 	return (0);
 }
@@ -62,7 +57,7 @@ static void	p_eat(t_philo *p)
 		{
 			p->fork_l->in_use = 0;
 			pthread_mutex_unlock(&p->fork_l->mtx);
-			usleep(5);
+			usleep(20);
 		}
 	}
 }
@@ -90,7 +85,7 @@ void	*philo_routine(void *philo)
 	p->last_m = get_t();
 	if (p->id % 2)
 		my_usleep(p, p->data->n[2] / 4);
-	while (p->n_of_t_philo_eat--)
+	while (p->n_of_t_philo_eat-- && !is_finish(p->data))
 	{
 		if (p->data->n[0] == 1)
 		{

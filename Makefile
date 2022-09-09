@@ -6,13 +6,13 @@
 #    By: mabimich <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/27 17:57:39 by mabimich          #+#    #+#              #
-#    Updated: 2022/09/08 19:04:54 by mabimich         ###   ########.fr        #
+#    Updated: 2022/09/09 04:54:56 by manuel           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		= philo
 
-SRCS		= main.c philo.c utils.c
+SRCS		= main.c philo.c utils.c utils2.c
 
 OBJS		= ${SRCS:.c=.o}
 
