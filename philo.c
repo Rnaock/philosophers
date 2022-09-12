@@ -6,7 +6,7 @@
 /*   By: mabimich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 18:16:08 by mabimich          #+#    #+#             */
-/*   Updated: 2022/09/09 05:07:23 by manuel           ###   ########.fr       */
+/*   Updated: 2022/09/12 19:01:01 by mabimich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ static int	my_usleep(t_philo *p, time_t t)
 	i = 0;
 	while (get_t() < start + t)
 	{
-		usleep(1000);
+		usleep(500);
 		if (get_t() > p->last_m + p->data->n[1])
 		{
 			ft_print(1, get_t() - p->data->start_s, p, "is died");
 			return (1);
 		}
-		if (!(++i % 1000) && !is_finish(p->data))
+		if (!(++i % 500) && is_finish(p->data))
 			return (0);
 	}
 	return (0);
@@ -35,31 +35,20 @@ static int	my_usleep(t_philo *p, time_t t)
 
 static void	p_eat(t_philo *p)
 {
-	while (1)
+	pthread_mutex_lock(&p->fork_r->mtx);
+	pthread_mutex_lock(&p->fork_l->mtx);
+	if (get_t() > p->last_m + p->data->n[1] || is_finish(p->data))
 	{
-		if (!p->fork_l->in_use)
-		{
-			pthread_mutex_lock(&p->fork_l->mtx);
-			p->fork_l->in_use = 1;
-		}
-		if (!p->fork_r->in_use)
-		{
-			pthread_mutex_lock(&p->fork_r->mtx);
-			p->last_m = get_t();
-			ft_print(0, p->last_m - p->data->start_s, p, NULL);
-			my_usleep(p, p->data->n[2]);
-			p->fork_l->in_use = 0;
-			pthread_mutex_unlock(&p->fork_l->mtx);
-			pthread_mutex_unlock(&p->fork_r->mtx);
-			return ;
-		}
-		else
-		{
-			p->fork_l->in_use = 0;
-			pthread_mutex_unlock(&p->fork_l->mtx);
-			usleep(20);
-		}
+		ft_print(1, get_t() - p->data->start_s, p, "is died");
+		pthread_mutex_unlock(&p->fork_r->mtx);
+		pthread_mutex_unlock(&p->fork_l->mtx);
+		return ;
 	}
+	p->last_m = get_t();
+	ft_print(0, get_t() - p->data->start_s, p, NULL);
+	my_usleep(p, p->data->n[2]);
+	pthread_mutex_unlock(&p->fork_r->mtx);
+	pthread_mutex_unlock(&p->fork_l->mtx);
 }
 
 static void	p_sleep(t_philo *p)
@@ -73,6 +62,7 @@ static void	p_think(t_philo *p)
 	ft_print(0, get_t() - p->data->start_s, p, "is thinking");
 	if (!p->data->n[2] || !p->data->n[3])
 		usleep(5);
+	my_usleep(p, (p->data->n[1] - (get_t() - p->last_m) - p->data->n[2]) / 2);
 }
 
 void	*philo_routine(void *philo)
