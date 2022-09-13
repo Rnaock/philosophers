@@ -6,7 +6,7 @@
 /*   By: manuel <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/09 04:29:33 by manuel            #+#    #+#             */
-/*   Updated: 2022/09/09 04:53:10 by manuel           ###   ########.fr       */
+/*   Updated: 2022/09/13 15:06:02 by mabimich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	is_bad_input(int ac, char **av)
 	i = 1;
 	if (ac != 5 && ac != 6)
 		return (1);
-	if (ft_atoi(av[i]) < 1)
+	if (ft_atoi(av[i]) < 1 || ft_atoi(av[i]) > 1000)
 		return (1);
 	while (++i < ac)
 		if (ft_atoi(av[i]) < 0)
