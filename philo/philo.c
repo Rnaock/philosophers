@@ -6,7 +6,7 @@
 /*   By: mabimich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 18:16:08 by mabimich          #+#    #+#             */
-/*   Updated: 2022/09/13 15:44:01 by mabimich         ###   ########.fr       */
+/*   Updated: 2022/09/14 16:01:28 by mabimich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	my_usleep(t_philo *p, time_t t)
 		usleep(500);
 		if (get_t() > p->last_m + p->data->n[1])
 		{
-			ft_print(1, get_t() - p->data->start_s, p, "is died");
+			ft_print(1, get_t() - p->data->start_s, p, "died");
 			return (1);
 		}
 		if (!(++i % 500) && is_finish(p->data))
@@ -63,6 +63,8 @@ static void	p_think(t_philo *p)
 	if (!p->data->n[2] || !p->data->n[3])
 		usleep(5);
 	my_usleep(p, (p->data->n[1] - (get_t() - p->last_m) - p->data->n[2]) / 2);
+	my_usleep(p, p->data->n[2] - p->data->n[3]);
+
 }
 
 void	*philo_routine(void *philo)
