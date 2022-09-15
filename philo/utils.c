@@ -6,7 +6,7 @@
 /*   By: mabimich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/06 22:18:02 by mabimich          #+#    #+#             */
-/*   Updated: 2022/09/12 18:28:28 by mabimich         ###   ########.fr       */
+/*   Updated: 2022/09/15 20:39:22 by mabimich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,9 @@ void	ft_print(int dead, time_t t, t_philo *philo, char *str)
 			printf("%ld\t%d\thas taken a fork\n", t, philo->id);
 			printf("%ld\t%d\thas taken a fork\n", t, philo->id);
 			printf("%ld\t%d\tis eating\n", t, philo->id);
+			philo->n_of_t_philo_eat--;
+			if (!philo->n_of_t_philo_eat)
+				dead = 1;
 		}
 	}
 	if (dead == 1)

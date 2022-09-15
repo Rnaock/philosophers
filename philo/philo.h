@@ -6,7 +6,7 @@
 /*   By: mabimich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 18:25:49 by mabimich          #+#    #+#             */
-/*   Updated: 2022/09/09 05:05:47 by manuel           ###   ########.fr       */
+/*   Updated: 2022/09/15 20:43:31 by mabimich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ time_t	get_t(void);
 void	*philo_routine(void *philo);
 int		ft_atoi(const char *str);
 void	*ft_calloc(size_t count, size_t size);
-int		is_finish(t_data *data);
+int		test_finish(t_data *data);
 int		is_bad_input(int ac, char **av);
 
 #endif

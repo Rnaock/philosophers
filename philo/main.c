@@ -6,7 +6,7 @@
 /*   By: mabimich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 18:16:08 by mabimich          #+#    #+#             */
-/*   Updated: 2022/09/12 15:09:16 by mabimich         ###   ########.fr       */
+/*   Updated: 2022/09/15 20:35:58 by mabimich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,6 @@ static t_data	*init(int ac, char **av)
 		return (free(data->fork), data);
 	pthread_mutex_destroy(&data->msg);
 	i = -1;
-	while (++i < data->n[0])
-		pthread_mutex_destroy(&data->fork->mtx);
 	return (free(data->fork), data);
 }
 

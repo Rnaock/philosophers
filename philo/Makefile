@@ -6,7 +6,7 @@
 #    By: mabimich <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/27 17:57:39 by mabimich          #+#    #+#              #
-#    Updated: 2022/09/09 04:54:56 by manuel           ###   ########.fr        #
+#    Updated: 2022/09/15 21:15:55 by mabimich         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ RM			= rm -f
 
 CC			= cc
 
-FLAGS		= -Wall -Wextra -Werror -pthread
+FLAGS		= -Wall -Wextra -Werror -pthread -g3 -fsanitize=thread
 
 all		: ${NAME}
 

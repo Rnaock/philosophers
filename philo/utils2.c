@@ -6,13 +6,13 @@
 /*   By: manuel <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/09 04:29:33 by manuel            #+#    #+#             */
-/*   Updated: 2022/09/13 15:06:02 by mabimich         ###   ########.fr       */
+/*   Updated: 2022/09/15 20:43:20 by mabimich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	is_finish(t_data *data)
+int	test_finish(t_data *data)
 {	
 	pthread_mutex_lock(&data->msg);
 	if (data->finish)
