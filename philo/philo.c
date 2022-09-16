@@ -6,7 +6,7 @@
 /*   By: mabimich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 18:16:08 by mabimich          #+#    #+#             */
-/*   Updated: 2022/09/16 16:34:17 by mabimich         ###   ########.fr       */
+/*   Updated: 2022/09/17 00:25:32 by mabimich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	*philo_routine(void *philo)
 	set_last_m(p, p->data->start_s);
 	while (get_t() < p->data->start_s)
 		continue ;
-	if (p->id % 2)
+	if (p->id % 2 && p->data->n[0] != 1)
 		my_usleep(p, p->data->n[2] / 4);
 	while (!set_get_finish(p->data, -1) && p->n_of_t_philo_eat)
 	{

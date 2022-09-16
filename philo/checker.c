@@ -6,13 +6,11 @@
 /*   By: mabimich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 16:17:10 by mabimich          #+#    #+#             */
-/*   Updated: 2022/09/16 16:34:41 by mabimich         ###   ########.fr       */
+/*   Updated: 2022/09/17 01:55:09 by mabimich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-// ligne 32 peut etre remplacer 1 par 0
 
 void	*checker_philo(void *philos)
 {
@@ -45,9 +43,11 @@ void	*checker_philo(void *philos)
 
 int	init_checker(t_data *data, t_philo *checker, t_philo **philos)
 {
+	int	out;
+
 	if (!checker)
 		return (0);
 	checker->data = data;
-	pthread_create(&checker->thd, NULL, checker_philo, philos);
-	return (0);
+	out = pthread_create(&checker->thd, NULL, checker_philo, philos);
+	return (out);
 }

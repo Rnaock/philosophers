@@ -6,7 +6,7 @@
 /*   By: mabimich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 18:16:08 by mabimich          #+#    #+#             */
-/*   Updated: 2022/09/16 16:36:30 by mabimich         ###   ########.fr       */
+/*   Updated: 2022/09/17 00:10:52 by mabimich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,21 +52,22 @@ static int	create_philo(t_data *data)
 	out = 0;
 	philos = ft_calloc(sizeof(t_philo), data->n[0]);
 	checker = ft_calloc(sizeof(t_philo), 1);
-	if (!philos || init_philos(data, philos) || \
-			init_checker(data, checker, philos))
+	if (!philos || init_philos(data, philos))
 		return (free(data->fork), 1);
+	out = init_checker(data, checker, philos);
 	while (++i < data->n[0] && !out)
 		out = pthread_create(&philos[i]->thd, NULL, philo_routine, philos[i]);
+	if (out)
+		set_get_finish(data, 1);
 	pthread_join(checker->thd, NULL);
 	free(checker);
 	i = -1;
-	while (++i < data->n[0] && !out)
+	while (++i < data->n[0])
 	{
-		out = pthread_join(philos[i]->thd, NULL);
+		pthread_join(philos[i]->thd, NULL);
 		free(philos[i]);
 	}
-	free(philos);
-	return (0);
+	return (free(philos), 0);
 }
 
 static t_data	*init(int ac, char **av)
