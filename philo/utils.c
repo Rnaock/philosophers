@@ -6,7 +6,7 @@
 /*   By: mabimich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/06 22:18:02 by mabimich          #+#    #+#             */
-/*   Updated: 2022/09/16 07:11:24 by manuel           ###   ########.fr       */
+/*   Updated: 2022/09/16 16:58:53 by mabimich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,11 +84,17 @@ void	ft_print(int dead, time_t t, t_philo *philo, char *str)
 	pthread_mutex_unlock(&philo->data->msg);
 }
 
-time_t	get_t(void)
+int	is_bad_input(int ac, char **av)
 {
-	struct timeval	tv;
+	int	i;
 
-	if (gettimeofday(&tv, NULL))
-		return (0);
-	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
+	i = 1;
+	if (ac != 5 && ac != 6)
+		return (1);
+	if (ft_atoi(av[i]) < 1 || ft_atoi(av[i]) > 5000)
+		return (1);
+	while (++i < ac)
+		if (ft_atoi(av[i]) < 0)
+			return (1);
+	return (0);
 }

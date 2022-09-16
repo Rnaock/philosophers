@@ -6,7 +6,7 @@
 /*   By: mabimich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 18:16:08 by mabimich          #+#    #+#             */
-/*   Updated: 2022/09/16 07:01:36 by manuel           ###   ########.fr       */
+/*   Updated: 2022/09/16 16:34:17 by mabimich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,9 @@ static int	my_usleep(t_philo *p, time_t t)
 	i = -1;
 	while (get_t() < start + t)
 	{
-		if (!(++i % 500) && test_finish(p->data))
+		if (!(++i % 500) && set_get_finish(p->data, -1))
 			return (0);
 		usleep(500);
-		if (get_t() > test_last_m(p) + p->data->n[1])
-		{
-			ft_print(1, get_t() - p->data->start_s, p, "died");
-			return (1);
-		}
 	}
 	return (0);
 }
@@ -45,7 +40,7 @@ static void	p_eat(t_philo *p)
 		pthread_mutex_lock(&p->fork_l->mtx);
 		pthread_mutex_lock(&p->fork_r->mtx);
 	}
-	if (get_t() > (long)test_last_m(p) + p->data->n[1] || test_finish(p->data))
+	if (get_t() > (long)test_last_m(p) + p->data->n[1])
 	{
 		ft_print(1, get_t() - p->data->start_s, p, "died");
 		pthread_mutex_unlock(&p->fork_r->mtx);
@@ -71,12 +66,6 @@ static void	p_think(t_philo *p)
 	if (!p->data->n[2] || !p->data->n[3])
 		usleep(5);
 	my_usleep(p, p->data->n[2] - p->data->n[3] + 1);
-//	printf("==> %d --> %d\n", p->id, (p->data->n[2] - p->data->n[3] +1));
-//	my_usleep(p, 5);
-//	printf("==> %d --> %d\n", p->id, (p->data->n[1] - p->data->n[2] - p->data->n[3] +1));
-//	my_usleep(p, p->data->n[1] - p->data->n[2] - p->data->n[3] + 1);
-//	my_usleep(p, (p->data->n[1] - (get_t() - p->last_m) - p->data->n[2]) / 2);
-//	printf("==> %d --> %ld\n", p->id, (p->data->n[1] - (get_t() - p->last_m) - p->data->n[2]) / 2);
 }
 
 void	*philo_routine(void *philo)
@@ -89,7 +78,7 @@ void	*philo_routine(void *philo)
 		continue ;
 	if (p->id % 2)
 		my_usleep(p, p->data->n[2] / 4);
-	while (!test_finish(p->data))
+	while (!set_get_finish(p->data, -1) && p->n_of_t_philo_eat)
 	{
 		if (p->data->n[0] == 1)
 		{
@@ -98,6 +87,8 @@ void	*philo_routine(void *philo)
 			return (NULL);
 		}
 		p_eat(philo);
+		if (!p->n_of_t_philo_eat)
+			my_usleep(p, LONG_MAX - get_t());
 		p_sleep(philo);
 		p_think(philo);
 	}
