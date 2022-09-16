@@ -6,7 +6,7 @@
 /*   By: mabimich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 18:16:08 by mabimich          #+#    #+#             */
-/*   Updated: 2022/09/16 05:47:43 by manuel           ###   ########.fr       */
+/*   Updated: 2022/09/16 07:01:36 by manuel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,12 +89,13 @@ void	*philo_routine(void *philo)
 		continue ;
 	if (p->id % 2)
 		my_usleep(p, p->data->n[2] / 4);
-	while (p->n_of_t_philo_eat && !test_finish(p->data))
+	while (!test_finish(p->data))
 	{
 		if (p->data->n[0] == 1)
 		{
 			ft_print(0, get_t() - p->data->start_s, p, "has taken a fork");
 			my_usleep(p, LONG_MAX - get_t());
+			return (NULL);
 		}
 		p_eat(philo);
 		p_sleep(philo);

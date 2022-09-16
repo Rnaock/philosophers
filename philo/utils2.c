@@ -6,7 +6,7 @@
 /*   By: manuel <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/09 04:29:33 by manuel            #+#    #+#             */
-/*   Updated: 2022/09/16 04:23:13 by manuel           ###   ########.fr       */
+/*   Updated: 2022/09/16 07:12:16 by manuel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,24 @@ void	set_last_m(t_philo *p, time_t l_m)
 	pthread_mutex_lock(&p->m_last_m);
 	p->last_m = l_m;
 	pthread_mutex_unlock(&p->m_last_m);
+}
+
+int	set_get_n_of_t_ph_eat(t_philo *p, int i)
+{	
+	int	out;
+
+	pthread_mutex_lock(&p->m_NofT);
+	if (!i)
+		out = p->n_of_t_philo_eat;
+	else if (i == -1 && p->n_of_t_philo_eat > 0)
+		p->n_of_t_philo_eat--;
+	else if (i > 0)
+		p->n_of_t_philo_eat = i;
+	pthread_mutex_unlock(&p->m_NofT);
+	if (!i)
+		return (out);
+	else
+		return (-1);
 }
 
 int	is_bad_input(int ac, char **av)

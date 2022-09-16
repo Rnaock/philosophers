@@ -6,7 +6,7 @@
 /*   By: mabimich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 18:16:08 by mabimich          #+#    #+#             */
-/*   Updated: 2022/09/16 05:46:34 by manuel           ###   ########.fr       */
+/*   Updated: 2022/09/16 07:05:55 by manuel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	init_philos(t_data *data, t_philo **philos)
 		if (!philos[i])
 			return (free(philos), 1);
 		philos[i]->id = i + 1;
-		philos[i]->n_of_t_philo_eat = data->n[4];
+		set_get_n_of_t_ph_eat(philos[i], data->n[4]);
 		philos[i]->data = data;
 		if (philos[i]->id == 1)
 			philos[i]->fork_l = &data->fork[data->n[0] - 1];
@@ -45,18 +45,28 @@ void	*checker_philo(void *philos)
 {
 	t_philo	**ps;
 	int		i;
+	int		n_meal;
 
+	n_meal = 0;
 	i = -1;
 	ps = philos;
-	(void)ps;
 	while (get_t() < ps[0]->data->start_s)
 		continue ;
 	while (++i < ps[0]->data->n[0] && !test_finish(ps[0]->data))
 	{
+		n_meal += set_get_n_of_t_ph_eat(ps[i], 0);
 		if (test_last_m(ps[i]) && test_last_m(ps[i]) + ps[i]->data->n[1] < get_t())
 			ft_print(1, get_t() - ps[0]->data->start_s, ps[i], "died");
-		if (i == ps[0]->data->n[0] - 1)
+		if (i == ps[0]->data->n[0] - 1)// peut etre remplacer 1 par 0
 			i = -1;
+		if (i == -1 && !n_meal)
+		{
+			pthread_mutex_lock(&ps[0]->data->msg);
+			ps[0]->data->finish = 1;
+			pthread_mutex_unlock(&ps[0]->data->msg);
+		}
+		if (i == -1)
+			n_meal = 0;
 		if (i == -1)
 			usleep(500);
 	}
@@ -87,14 +97,14 @@ static int	create_philo(t_data *data)
 		return (free(data->fork), 1);
 	while (++i < data->n[0] && !out)
 		out = pthread_create(&philos[i]->thd, NULL, philo_routine, philos[i]);
+	pthread_join(checker->thd, NULL);
+	free(checker);
 	i = -1;
 	while (++i < data->n[0] && !out)
 	{
 		out = pthread_join(philos[i]->thd, NULL);
 		free(philos[i]);
 	}
-	pthread_join(checker->thd, NULL);
-	free(checker);
 	free(philos);
 	return (0);
 }

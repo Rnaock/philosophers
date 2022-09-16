@@ -6,7 +6,7 @@
 /*   By: mabimich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 18:25:49 by mabimich          #+#    #+#             */
-/*   Updated: 2022/09/16 04:21:56 by manuel           ###   ########.fr       */
+/*   Updated: 2022/09/16 06:28:02 by manuel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ typedef struct s_philo
 	time_t			start_t;
 	time_t			last_m;
 	pthread_mutex_t	m_last_m;
+	pthread_mutex_t	m_NofT;
 	int				n_of_philo;
 	int				t_2_die;
 	int				t_2_eat;
@@ -69,6 +70,7 @@ void	*ft_calloc(size_t count, size_t size);
 int		test_finish(t_data *data);
 time_t	test_last_m(t_philo *p);
 void	set_last_m(t_philo *p, time_t l_m);
+int		set_get_n_of_t_ph_eat(t_philo *p, int i);
 int		is_bad_input(int ac, char **av);
 
 #endif
