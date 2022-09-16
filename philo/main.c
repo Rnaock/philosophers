@@ -6,7 +6,7 @@
 /*   By: mabimich <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 18:16:08 by mabimich          #+#    #+#             */
-/*   Updated: 2022/09/15 20:35:58 by mabimich         ###   ########.fr       */
+/*   Updated: 2022/09/16 05:46:34 by manuel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,16 +41,49 @@ static int	init_philos(t_data *data, t_philo **philos)
 	return (0);
 }
 
+void	*checker_philo(void *philos)
+{
+	t_philo	**ps;
+	int		i;
+
+	i = -1;
+	ps = philos;
+	(void)ps;
+	while (get_t() < ps[0]->data->start_s)
+		continue ;
+	while (++i < ps[0]->data->n[0] && !test_finish(ps[0]->data))
+	{
+		if (test_last_m(ps[i]) && test_last_m(ps[i]) + ps[i]->data->n[1] < get_t())
+			ft_print(1, get_t() - ps[0]->data->start_s, ps[i], "died");
+		if (i == ps[0]->data->n[0] - 1)
+			i = -1;
+		if (i == -1)
+			usleep(500);
+	}
+	return (NULL);
+}
+
+static int	init_checker(t_data *data, t_philo *checker, t_philo **philos)
+{
+	if (!checker)
+		return (0);
+	checker->data = data;
+	pthread_create(&checker->thd, NULL, checker_philo, philos);
+	return (0);
+}
+
 static int	create_philo(t_data *data)
 {
 	int		i;
 	int		out;
 	t_philo	**philos;
+	t_philo	*checker;
 
 	i = -1;
 	out = 0;
 	philos = ft_calloc(sizeof(t_philo), data->n[0]);
-	if (!philos || init_philos(data, philos))
+	checker = ft_calloc(sizeof(t_philo), 1);
+	if (!philos || init_philos(data, philos) || init_checker(data, checker, philos))
 		return (free(data->fork), 1);
 	while (++i < data->n[0] && !out)
 		out = pthread_create(&philos[i]->thd, NULL, philo_routine, philos[i]);
@@ -60,6 +93,8 @@ static int	create_philo(t_data *data)
 		out = pthread_join(philos[i]->thd, NULL);
 		free(philos[i]);
 	}
+	pthread_join(checker->thd, NULL);
+	free(checker);
 	free(philos);
 	return (0);
 }
