@@ -14,17 +14,17 @@
 
 static int	init_philos(t_data *data, t_philo **philos)
 {
-	int		i;
+	static int		i = -1;
 
-	i = -1;
 	while (++i < data->n[0])
 	{
 		philos[i] = ft_calloc(sizeof(t_philo), 1);
 		if (!philos[i])
+		{
 			while (--i >= 0)
 				free(philos[i]);
-		if (!philos[i])
-			return (free(philos), 1);
+			return (1);
+		}
 		philos[i]->id = i + 1;
 		set_get_n_of_t_ph_eat(philos[i], data->n[4]);
 		philos[i]->data = data;
@@ -52,8 +52,8 @@ static int	create_philo(t_data *data)
 	out = 0;
 	philos = ft_calloc(sizeof(t_philo), data->n[0]);
 	checker = ft_calloc(sizeof(t_philo), 1);
-	if (!philos || init_philos(data, philos))
-		return (free(data->fork), 1);
+	if (!philos || !checker || init_philos(data, philos))
+		return (free(philos), free(checker), 1);
 	out = init_checker(data, checker, philos);
 	while (++i < data->n[0] && !out)
 		out = pthread_create(&philos[i]->thd, NULL, philo_routine, philos[i]);

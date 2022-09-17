@@ -6,7 +6,7 @@
 #    By: mabimich <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/27 17:57:39 by mabimich          #+#    #+#              #
-#    Updated: 2022/09/17 00:47:34 by mabimich         ###   ########.fr        #
+#    Updated: 2022/09/17 06:41:46 by mabimich         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,12 +20,12 @@ RM			= rm -f
 
 CC			= cc
 
-FLAGS		= -Wall -Wextra -Werror -pthread -g3 #-fsanitize=thread
+FLAGS		= -Wall -Wextra -Werror -pthread #-g3 -fsanitize=thread
 
 all		: ${NAME}
 
 %.o: %.c
-	$(CC) -Wall -Wextra -Werror -o3 -g3 -c $< -o $@
+	$(CC) ${FLAGS} -c $< -o $@
 
 ${NAME}		: ${OBJS}
 		  @echo "\033[34m----Compiling----"
